@@ -1,165 +1,254 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kalkulator Flowchart</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flowchart Kalkulator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        .container {
-            display: flex;
-            justify-content: space-between;
-        }
-        .flowchart {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 50%;
-        }
-        .node {
-            width: 200px;
-            height: 80px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            margin: 10px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            border: 2px solid #007bff;
-            position: relative;
-        }
-        .node:hover {
-            background-color: #f0f0f0;
-        }
-        .active {
-            background-color: #007bff;
-            color: white;
-        }
-        .process { border-radius: 0; }
-        .terminal { border-radius: 40px; }
-        .decision { transform: rotate(45deg); width: 120px; height: 120px; }
-        .decision span { transform: rotate(-45deg); }
-        .input { transform: skew(20deg); }
-        .input span { transform: skew(-20deg); }
-        .arrow {
-            font-size: 24px;
-            margin: 5px;
-        }
-        #explanation {
-            width: 45%;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            background-color: #f9f9f9;
-            position: sticky;
-            top: 20px;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-        pre {
-            background-color: #f0f0f0;
-            padding: 10px;
-            border-radius: 5px;
-            overflow-x: auto;
-        }
+      h1 {
+        font-size: 2.5rem;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 20px;
+        color: #007bff;
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+        letter-spacing: 1.5px;
+        font-family: "Poppins", sans-serif;
+      }
+
+      p {
+        font-size: 1.2rem;
+        text-align: center;
+        color: #555;
+        line-height: 1.8;
+        font-family: "Lora", serif;
+        letter-spacing: 0.5px;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        overflow-x: hidden; /* Ensure no horizontal scroll */
+      }
+
+      .centered-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 15vh;
+      }
+
+      .container {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+      }
+      .flowchart {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+      .node {
+        width: 200px;
+        height: 80px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        margin: 10px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        border: 2px solid #007bff;
+        position: relative;
+      }
+      .node:hover {
+        background-color: #f0f0f0;
+      }
+      .active {
+        background-color: #007bff;
+        color: white;
+      }
+      .process {
+        border-radius: 0;
+      }
+      .terminal {
+        border-radius: 40px;
+      }
+      .decision {
+        transform: rotate(45deg);
+        width: 120px;
+        height: 120px;
+      }
+      .decision span {
+        transform: rotate(-45deg);
+      }
+      .input {
+        transform: skew(20deg);
+      }
+      .input span {
+        transform: skew(-20deg);
+      }
+      .arrow {
+        font-size: 24px;
+        margin: 5px;
+      }
+      #explanation {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 80%;
+        max-width: 600px;
+        background-color: #ffffff;
+        border: 2px solid #007bff;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        padding: 20px;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+        max-height: 60vh;
+        overflow-y: auto;
+      }
+
+      #explanation.show {
+        opacity: 1;
+        visibility: visible;
+      }
+      pre {
+        background-color: #f0f0f0;
+        padding: 10px;
+        border-radius: 5px;
+        overflow-x: auto;
+      }
     </style>
-</head>
-<body>
-    <h1>Kalkulator Flowchart</h1>
-    <p>Klik pada setiap langkah untuk melihat penjelasan dan kode yang relevan.</p>
+  </head>
+  <body>
+    <h1>Flowchart Kalkulator</h1>
+    <div class="centered-container">
+      <p>
+        Klik pada setiap langkah untuk melihat penjelasan dan kode yang relevan.
+      </p>
+    </div>
     <div class="container">
-        <div class="flowchart">
-            <div class="node terminal" data-step="1"><span>Start</span></div>
-            <div class="arrow">↓</div>
-            <div class="node input" data-step="2"><span>Masukan Angka Pertama</span></div>
-            <div class="arrow">↓</div>
-            <div class="node input" data-step="3"><span>Masukan Operator</span></div>
-            <div class="arrow">↓</div>
-            <div class="node input" data-step="4"><span>Masukan Angka Kedua</span></div>
-            <div class="arrow">↓</div>
-            <div class="node decision" data-step="5"><span>Pilih Operasi</span></div>
-            <div class="arrow">↓</div>
-            <div class="node process" data-step="6"><span>Hitung Hasil</span></div>
-            <div class="arrow">↓</div>
-            <div class="node decision" data-step="7"><span>Pembagian Nol?</span></div>
-            <div class="arrow">↓</div>
-            <div class="node process" data-step="8"><span>Tampilkan Hasil</span></div>
-            <div class="arrow">↓</div>
-            <div class="node terminal" data-step="9"><span>End</span></div>
+      <div class="flowchart">
+        <div class="node terminal" data-step="1"><span>Start</span></div>
+        <div class="arrow">↓</div>
+        <div class="node input" data-step="2">
+          <span>Masukan Angka Pertama</span>
         </div>
-        <div id="explanation"></div>
+        <div class="arrow">↓</div>
+        <div class="node input" data-step="3">
+          <span>Masukan Operator</span>
+        </div>
+        <div class="arrow">↓</div>
+        <div class="node input" data-step="4">
+          <span>Masukan Angka Kedua</span>
+        </div>
+        <div class="arrow">↓</div>
+        <div class="node decision" data-step="5">
+          <span>Pilih Operasi</span>
+        </div>
+        <div class="arrow">↓</div>
+        <div class="node process" data-step="6"><span>Hitung Hasil</span></div>
+        <div class="arrow">↓</div>
+        <div class="node decision" data-step="7">
+          <span>Pembagian Nol?</span>
+        </div>
+        <div class="arrow">↓</div>
+        <div class="node process" data-step="8">
+          <span>Tampilkan Hasil</span>
+        </div>
+        <div class="arrow">↓</div>
+        <div class="node terminal" data-step="9"><span>End</span></div>
+      </div>
+    </div>
+
+    <div id="explanation">
+      <button
+        id="closeExplanation"
+        class="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+      >
+        &times; Tutup
+      </button>
     </div>
 
     <script>
-        const explanations = {
-            1: {
-                text: "Program kalkulator dimulai di sini. Program ini akan memandu pengguna untuk memasukkan dua angka dan operator, lalu melakukan operasi yang sesuai. (program baru berjalan saat pemanggilan fungsi `kalkulator()` di kode paling bawah)",
-                code: `kalkulator <- function() {`
-            },
-            2: {
-                text: "Program meminta pengguna untuk memasukkan angka pertama. Input dikonversi menjadi nilai numerik.",
-                code: `print("Masukan angka pertama:")
-angka1 <- as.numeric(readline())`
-            },
-            3: {
-                text: "Program meminta pengguna untuk memasukkan operator. Pengguna dapat memilih antara +, -, *, atau /.",
-                code: `print("Masukan operator (+, -, *, /):")
-operator <- readline()`
-            },
-            4: {
-                text: "Program meminta pengguna untuk memasukkan angka kedua. Sekali lagi, input dikonversi menjadi nilai numerik.",
-                code: `print("Masukan angka ke dua:")
-angka2 <- as.numeric(readline())`
-            },
-            5: {
-                text: "Program memeriksa operator mana yang dimasukkan dan mempersiapkan untuk melakukan operasi yang sesuai. Operasi yang mungkin adalah penjumlahan, pengurangan, perkalian, dan pembagian.",
-                code: `hasil <- switch(operator,
-                  "+" = angka1 + angka2,
-                  "-" = angka1 - angka2,
-                  "*" = angka1 * angka2,
-                  "/" = ifelse(angka2 != 0, angka1 / angka2, "Gabisa dibagi 0, tidak terdefinisi"))`
-                  
-            },
-            6: {
-                text: "Program melakukan perhitungan berdasarkan operator yang dipilih. Hasil operasi disimpan dalam variabel `hasil`.",
-                code: `"/" = ifelse(angka2 != 0, angka1 / angka2, "Gabisa dibagi 0, tidak terdefinisi"))`
-            },
-            7: {
-                text: "Jika operasi yang dipilih adalah pembagian, program memeriksa apakah angka kedua adalah nol. Pembagian dengan nol tidak diperbolehkan, dan program akan mengembalikan pesan kesalahan daripada melakukan pembagian.",
-                code: `"/" = ifelse(angka2 != 0, angka1 / angka2, "Gabisa dibagi 0, tidak terdefinisi"))`
-            },
-            8: {
-                text: "Hasil perhitungan ditampilkan kepada pengguna. Jika pembagian dengan nol dicoba, pengguna akan melihat pesan kesalahan daripada hasil numerik.",
-                code: `cat("Hasil:", hasil, "\\n")`
-            },
-            9: {
-                text: "Program berakhir setelah menampilkan hasil.",
-                code: `}`
-            }
-        };
+      const explanations = {
+        1: {
+          text: "Program kalkulator dimulai di sini. Program ini akan memandu pengguna untuk memasukkan dua angka dan operator, lalu melakukan operasi yang sesuai. (Program baru berjalan saat pemanggilan fungsi `kalkulator()` di kode paling bawah)",
+          code: `kalkulator <- function() {`,
+        },
+        2: {
+          text: "Program meminta pengguna untuk memasukkan angka pertama. Input dikonversi menjadi nilai numerik.",
+          code: `print("Masukan angka pertama:")\nangka1 <- as.numeric(readline())`,
+        },
+        3: {
+          text: "Program meminta pengguna untuk memasukkan operator. Pengguna dapat memilih antara +, -, *, atau /.",
+          code: `print("Masukan operator (+, -, *, /):")\noperator <- readline()`,
+        },
+        4: {
+          text: "Program meminta pengguna untuk memasukkan angka kedua. Sekali lagi, input dikonversi menjadi nilai numerik.",
+          code: `print("Masukan angka ke dua:")\nangka2 <- as.numeric(readline())`,
+        },
+        5: {
+          text: "Program memeriksa operator mana yang dimasukkan dan mempersiapkan untuk melakukan operasi yang sesuai. Operasi yang mungkin adalah penjumlahan, pengurangan, perkalian, dan pembagian.",
+          code: `hasil <- switch(operator,\n  "+" = angka1 + angka2,\n  "-" = angka1 - angka2,\n  "*" = angka1 * angka2,\n  "/" = ifelse(angka2 != 0, angka1 / angka2, "Tidak dapat dibagi dengan nol"))`,
+        },
+        6: {
+          text: "Program melakukan perhitungan berdasarkan operator yang dipilih. Hasil operasi disimpan dalam variabel `hasil`.",
+          code: `cat("Hasil:", hasil, "\\n")`,
+        },
+        7: {
+          text: "Jika operasi yang dipilih adalah pembagian, program memeriksa apakah angka kedua adalah nol. Pembagian dengan nol tidak diperbolehkan, dan program akan mengembalikan pesan kesalahan daripada melakukan pembagian.",
+          code: `"/" = ifelse(angka2 != 0, angka1 / angka2, "Tidak dapat dibagi dengan nol"))`,
+        },
+        8: {
+          text: "Hasil perhitungan ditampilkan kepada pengguna. Jika pembagian dengan nol dicoba, pengguna akan melihat pesan kesalahan daripada hasil numerik.",
+          code: `cat("Hasil:", hasil, "\\n")`,
+        },
+        9: {
+          text: "Program berakhir setelah menampilkan hasil.",
+          code: `}`,
+        },
+      };
 
-        $('.node').on('click', function() {
-            const step = $(this).data('step');
-            const explanation = explanations[step];
-            if (explanation) {
-                $('#explanation').html(
-                    '<h2>Penjelasan Langkah ' + step + '</h2>' +
-                    '<p>' + explanation.text + '</p>' +
-                    '<pre><code>' + explanation.code + '</code></pre>'
-                );
-                $('.node').removeClass('active');
-                $(this).addClass('active');
-            }
+      document.querySelectorAll(".node").forEach((node) => {
+        node.addEventListener("click", () => {
+          const step = node.dataset.step;
+          const explanation = explanations[step];
+          if (explanation) {
+            const explanationDiv = document.getElementById("explanation");
+            explanationDiv.innerHTML = `
+                        <h2>Penjelasan Langkah ${step}</h2>
+                        <p>${explanation.text}</p>
+                        <pre><code>${explanation.code}</code></pre>
+                        <button id="closeExplanation" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700">&times; Tutup</button>
+                    `;
+            explanationDiv.classList.add("show");
+            document
+              .querySelectorAll(".node")
+              .forEach((n) => n.classList.remove("active"));
+            node.classList.add("active");
+
+            // Add event listener for the close button after re-rendering
+            document
+              .getElementById("closeExplanation")
+              .addEventListener("click", () => {
+                const explanationDiv = document.getElementById("explanation");
+                explanationDiv.classList.remove("show");
+              });
+          }
         });
+      });
     </script>
-</body>
+  </body>
 </html>
